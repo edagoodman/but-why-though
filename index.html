@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>But Why Though?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1620; --panel:#14212e; --panel2:#1a2b3b; --line:#26394c;
+  --ink:#e6edf3; --mute:#8aa0b4; --amber:#ffb627; --amber-dim:#7a5814;
+  --green:#5fd39a; --steel:#4a7fa7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background-color:var(--bg);background-attachment:fixed;color:var(--ink);font-family:Archivo,system-ui,sans-serif;
+  background-image:radial-gradient(circle at 20% 0%,#1b2f44 0,transparent 55%),
+  repeating-linear-gradient(0deg,transparent 0 39px,#ffffff05 39px 40px),
+  repeating-linear-gradient(90deg,transparent 0 39px,#ffffff05 39px 40px);}
+.mono{font-family:"JetBrains Mono",monospace}
+button{font:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:1fr 300px;grid-template-rows:auto 1fr;height:100vh;gap:16px;padding:16px}
+header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 20px}
+.logo{font-weight:900;font-size:22px;letter-spacing:.02em}
+.logo span{color:var(--amber)}
+.dots{display:flex;gap:8px}
+.dot{width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:var(--panel2);
+  color:var(--mute);font-family:"JetBrains Mono";font-size:13px}
+.dot.on{border-color:var(--amber);color:var(--amber)}
+.dot.done{background:var(--amber-dim);color:var(--ink);border-color:var(--amber-dim)}
+main{overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px 32px;position:relative}
+aside{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;overflow:auto}
+.label{font-family:"JetBrains Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.who{display:flex;align-items:center;gap:14px;margin:8px 0 14px}
+.avatar{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:var(--panel2);border:2px solid var(--amber)}
+.who b{font-size:18px}.who small{display:block;color:var(--mute);font-size:14px}
+.quote{font-size:clamp(28px,3.4vw,46px);font-weight:900;line-height:1.1;margin-bottom:24px}
+.quote::before{content:"“";color:var(--amber)}.quote::after{content:"”";color:var(--amber)}
+.clues{display:grid;gap:10px;margin-bottom:22px}
+.clue{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:8px;border:1px dashed var(--line);color:var(--mute);font-size:19px;min-height:56px}
+.clue .n{font-family:"JetBrains Mono";font-size:13px;color:var(--steel);padding-top:4px;white-space:nowrap}
+.clue.open{border:1px solid var(--line);border-left:4px solid var(--amber);background:var(--panel2);color:var(--ink)}
+.clue.fresh{animation:pop .35s ease}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--ink);padding:12px 20px;border-radius:8px;font-weight:700;font-size:16px}
+.btn:hover{border-color:var(--amber)}
+.btn.primary{background:var(--amber);color:#1a1200;border-color:var(--amber)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn kbd{font-family:"JetBrains Mono";font-size:11px;opacity:.6;margin-left:8px}
+.pot{margin-left:auto;text-align:right}
+.pot .val{font-family:"JetBrains Mono";font-size:42px;font-weight:600;color:var(--amber);line-height:1}
+.reveal{margin-top:26px;display:none}
+.reveal.fresh{animation:pop .4s ease}
+.reveal.show{display:block}
+.need{background:#0f2a1f;border:1px solid #2c6b4c;border-radius:10px;padding:18px 20px;margin-bottom:14px}
+.need .label{color:var(--green)}
+.need p{font-size:24px;font-weight:700;margin-top:6px;line-height:1.25}
+.reqs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.req{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:17px;line-height:1.35}
+.req .label{margin-bottom:6px}
+.twist{font-size:18px;color:var(--amber);font-weight:700}
+.chatbar{margin-top:18px;padding:12px 16px;border-radius:8px;background:#ffb62712;border:1px solid var(--amber-dim);font-size:16px}
+/* scoreboard */
+.add{display:flex;gap:6px}
+.add input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:9px 10px;font:inherit;font-size:15px}
+.add button{background:var(--amber);border:0;border-radius:6px;padding:0 12px;font-weight:900;color:#1a1200}
+.players{display:grid;gap:6px}
+.p{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.p.lead{border-color:var(--amber)}
+.p .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p .sc{font-family:"JetBrains Mono";color:var(--amber);min-width:44px;text-align:right}
+.p button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:5px;padding:4px 7px;font-size:12px;font-family:"JetBrains Mono"}
+.p button.award{border-color:var(--amber-dim);color:var(--amber)}
+.hint{font-size:13px;color:var(--mute);line-height:1.45}
+.crib-link{display:block;text-align:center;padding:9px;border:1px solid var(--amber-dim);border-radius:6px;color:var(--amber);text-decoration:none;font-weight:700;font-size:14px}
+.crib-link:hover{border-color:var(--amber)}
+.crib{max-width:900px;margin:0 auto;padding:32px 20px}
+.crib h1{font-size:34px;font-weight:900;margin:6px 0 10px}.crib h1 span{color:var(--amber)}
+.crib .rulebox{background:var(--panel);border:1px solid var(--amber-dim);border-radius:10px;padding:14px 18px;margin-bottom:18px;font-size:16px;line-height:1.5}
+.crib .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.crib .card h2{font-size:18px;margin-bottom:4px}.crib .card h2 small{color:var(--mute);font-weight:500}
+.crib .card .q{color:var(--mute);font-style:italic;margin-bottom:8px}
+.crib .card p{font-size:16px;line-height:1.45;margin-top:4px}
+.crib .ok{color:var(--green)}.crib .no{color:#ff8a7a}
+.resets{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.resets button{background:var(--bg);border:1px solid var(--line);color:var(--mute);border-radius:6px;padding:8px;font-size:13px}
+.resets button.arm{border-color:var(--amber);color:var(--amber)}
+.resets button:hover{border-color:var(--amber);color:var(--ink)}
+/* intro/end */
+.big{font-size:clamp(40px,6vw,80px);font-weight:900;line-height:.95;margin:10px 0 18px}
+.big span{color:var(--amber)}
+.lede{font-size:21px;color:var(--mute);max-width:760px;line-height:1.45;margin-bottom:24px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px;max-width:980px}
+.rule{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px}
+.rule .label{color:var(--amber);margin-bottom:6px}
+.rule p{font-size:17px;line-height:1.4}
+.ladder{font-family:"JetBrains Mono";font-size:15px;color:var(--mute);margin-bottom:26px}
+.ladder b{color:var(--amber)}
+.endlist{font-size:20px;line-height:1.6;max-width:800px;margin-bottom:22px}
+.endlist li{margin-left:22px}
+@media (max-width:860px){.app{grid-template-columns:1fr;height:auto}.reqs,.rules{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">BUT WHY <span>THOUGH?</span></div>
+    <div class="dots" id="dots"></div>
+    <div class="label">Module 7 · Requirements</div>
+  </header>
+  <main id="stage"></main>
+  <aside>
+    <div class="label">Scoreboard</div>
+    <div class="add" id="addForm">
+      <input id="nameIn" placeholder="Add a name or team" maxlength="24" autocomplete="off">
+      <button type="button" id="addBtn">+</button>
+    </div>
+    <div class="players" id="players"></div>
+    <p class="hint">Hit <b style="color:var(--amber)">+pot</b> to give someone the current pot when they nail the real need in the chat. The pot drops every time the group has to ask “why?”.</p>
+    <p class="hint mono">Keys: W ask why · R reveal · N next</p>
+    <a class="crib-link" href="#coach" target="_blank" rel="noopener">Coach crib sheet ↗</a>
+    <p class="hint">Opens the answers in a new tab. Share only the game tab, not your whole screen.</p>
+    <div class="resets"><button onclick="armed(this,resetScores)">Zero scores</button><button onclick="armed(this,resetAll)">Reset everything</button></div>
+  </aside>
+</div>
+
+<script>
+const ROUNDS = [
+  {emoji:"🛒", name:"Gary", role:"Head of Customer Service",
+   ask:"We need an AI chatbot on the website.",
+   clues:["Customers keep emailing to ask where their order is.",
+          "The team answers about 200 of those emails a day. Same question, every time.",
+          "Thing is, the tracking link in the dispatch email has been broken since July."],
+   need:"Customers can’t track their own orders, so they email instead.",
+   f:"Every dispatch email contains a working tracking link for that order.",
+   nf:"Tracking page loads on a phone in under 3 seconds.",
+   twist:"Fix one link. No chatbot required."},
+  {emoji:"📅", name:"Priya", role:"Operations Director",
+   ask:"Can we get Copilot licences for everyone?",
+   clues:["Meetings are eating everyone’s week.",
+          "Afterwards, nobody’s sure what was actually agreed.",
+          "So we book another meeting to find out what we agreed in the last one."],
+   need:"A clear record of decisions and actions, with owners, after every meeting.",
+   f:"Actions and owners are shared with attendees within an hour of the meeting ending.",
+   nf:"Nothing is recorded or transcribed without every attendee’s consent.",
+   twist:"AI might help here. But the requirement is “know who’s doing what”, not “buy 400 licences”."},
+  {emoji:"📊", name:"Marcus", role:"Sales Manager",
+   ask:"Build us a dashboard. With AI in it.",
+   clues:["The board keep asking why sales dipped in March.",
+          "It takes Hannah three days to pull the numbers together.",
+          "By the time she’s done, they’ve moved on to a different question."],
+   need:"Answer the board’s ad-hoc sales questions in minutes, not days.",
+   f:"Users can filter sales by region, product and month.",
+   nf:"Data refreshes daily; any view loads in under 5 seconds.",
+   twist:"“With AI in it” isn’t a requirement. “Answers in minutes” is."},
+  {emoji:"📝", name:"Sian", role:"HR Business Partner",
+   ask:"We want ChatGPT to write our job adverts.",
+   clues:["We’re not getting enough applicants.",
+          "And the ones we do get aren’t right for the role.",
+          "The advert hasn’t changed since 2019. It asks for a degree the job doesn’t need."],
+   need:"Attract more of the right candidates for what the role actually involves.",
+   f:"Each advert lists the real day-to-day tasks and only the essential criteria.",
+   nf:"Written in plain English and checked against inclusive language guidance.",
+   twist:"A faster way to write the same bad advert is still a bad advert."},
+  {emoji:"☎️", name:"Dev", role:"Practice Manager",
+   ask:"We need a robot to answer the phones.",
+   clues:["Reception is swamped every Monday morning.",
+          "Most calls are people trying to rebook appointments.",
+          "Our online booking page only really works on a desktop."],
+   need:"Customers can rebook appointments themselves, easily, on any device.",
+   f:"A customer can move an existing appointment to a new slot without calling.",
+   nf:"Works on mobile and meets WCAG 2.2 AA so screen-reader users can rebook too.",
+   twist:"Usability and accessibility <i>were</i> the requirement all along. (Hello, K17.)"},
+  {emoji:"🍰", name:"Karen", role:"Office Manager",
+   ask:"Can AI sort out the office kitchen?",
+   clues:["There’s been… a fridge situation.",
+          "Nobody labels anything, so nobody knows whose food is whose.",
+          "On Friday someone ate Dave’s birthday cake. Dave is not OK."],
+   need:"Everyone can tell whose food is whose, and when it needs binning.",
+   f:"Every item in the fridge shows an owner’s name and a date.",
+   nf:"Labelling takes under 10 seconds, or nobody will bother.",
+   twist:"Solution: a roll of stickers and a Sharpie. Not every requirement needs AI."}
+];
+const POTS=[400,300,200,100];
+const ACCEPT=[
+ ["Customers can’t find out where their order is","The tracking link is broken","Too many “where’s my order?” emails"],
+ ["Nobody knows what was agreed in meetings","Actions and owners get lost after meetings","Too many meetings because nothing gets followed up"],
+ ["Getting sales numbers takes far too long","The board need quick answers to sales questions","Hannah spends days pulling reports"],
+ ["Not enough of the right applicants","The advert is out of date or asks for the wrong things","They’re putting people off with a degree requirement"],
+ ["Customers can’t rebook themselves","The booking page doesn’t work on phones","Rebooking calls swamp reception"],
+ ["Nobody knows whose food is whose","Food isn’t labelled or dated","Protecting Dave’s cake (allow it)"]];
+const REJECT=["An AI chatbot","Copilot / AI meeting notes","A dashboard / AI tool","ChatGPT / an AI writer","A phone bot / AI receptionist","Any AI. It’s a fridge."];
+function crib(){
+  document.body.innerHTML=`<div class="crib">
+    <div class="label">Coach only · don’t share this tab</div>
+    <h1>But Why <span>Though?</span> crib sheet</h1>
+    <div class="rulebox"><b>How to judge:</b> close enough counts. Give the pot to the first person who names the <b>problem</b>, in any words. If their answer is a tool or product (chatbot, AI, an app, a dashboard), it doesn’t score. That’s the whole point of the game.</div>
+    ${ROUNDS.map((R,i)=>`<div class="card">
+      <h2>${i+1}. ${R.emoji} ${R.name} <small>· ${R.role}</small></h2>
+      <div class="q">“${R.ask}”</div>
+      <p><b>Real need:</b> ${R.need}</p>
+      <p class="ok"><b>Accept:</b> ${ACCEPT[i].join(" · ")}</p>
+      <p class="no"><b>Don’t accept:</b> ${REJECT[i]}</p>
+    </div>`).join("")}
+  </div>`;
+  document.title="Crib sheet · But Why Though?";
+}
+
+let state={screen:"intro",r:0,clues:0,revealed:false,done:new Set()};
+let players=[];
+try{players=JSON.parse(localStorage.getItem("bwt-players")||"[]")}catch(e){}
+const save=()=>{try{localStorage.setItem("bwt-players",JSON.stringify(players))}catch(e){}};
+const $=s=>document.querySelector(s);
+const pot=()=>state.revealed?0:POTS[state.clues];
+
+function dots(){
+  $("#dots").innerHTML=ROUNDS.map((_,i)=>
+    `<button class="dot ${state.screen==="round"&&i===state.r?"on":""} ${state.done.has(i)?"done":""}" onclick="go(${i})" title="Stakeholder ${i+1}">${i+1}</button>`).join("");
+}
+function intro(){
+  $("#stage").innerHTML=`
+    <div class="label">Icebreaker · 10 minutes</div>
+    <div class="big">Stakeholders never<br>ask for what they <span>need.</span></div>
+    <p class="lede">They ask for a solution. Your job is to work out the real problem underneath it, before they spend £40k on a chatbot nobody needed.</p>
+    <div class="rules">
+      <div class="rule"><div class="label">1 · The ask</div><p>A stakeholder walks in with a solution. Read it. Spot the real need within it.</p></div>
+      <div class="rule"><div class="label">2 · Guess or ask</div><p>Type what you think the <b>real need</b> is in the chat. Stuck? Shout “but why though?” for a clue.</p></div>
+      <div class="rule"><div class="label">3 · Score</div><p>First to nail the real need takes the pot. Every “why” makes the pot smaller.</p></div>
+    </div>
+    <div class="ladder">POT &nbsp; <b>400</b> no clues → <b>300</b> → <b>200</b> → <b>100</b> all three clues</div>
+    <button class="btn primary" onclick="go(0)">Meet the first stakeholder →</button>`;
+}
+function round(){
+  const R=ROUNDS[state.r];
+  const clueHTML=R.clues.map((c,i)=>i<state.clues
+    ?`<div class="clue open ${state.anim==='clue'&&i===state.clues-1?'fresh':''}"><span class="n">WHY #${i+1}</span><span>${c}</span></div>`
+    :`<div class="clue"><span class="n">WHY #${i+1}</span><span>???</span></div>`).join("");
+  const last=state.r===ROUNDS.length-1;
+  $("#stage").innerHTML=`
+    <div class="label">Stakeholder ${state.r+1} of ${ROUNDS.length}</div>
+    <div class="who"><div class="avatar">${R.emoji}</div><div><b>${R.name}</b><small>${R.role}</small></div></div>
+    <div class="quote">${R.ask}</div>
+    <div class="clues">${clueHTML}</div>
+    <div class="controls">
+      <button class="btn" id="whyBtn" onclick="why()" ${state.clues>=3||state.revealed?"disabled":""}>But why though?<kbd>W</kbd></button>
+      <button class="btn primary" onclick="reveal()" ${state.revealed?"disabled":""}>Reveal the real need<kbd>R</kbd></button>
+      ${state.revealed?`<button class="btn" onclick="${last?"end()":"go("+(state.r+1)+")"}">${last?"Finish":"Next stakeholder"} →<kbd>N</kbd></button>`:""}
+      <div class="pot"><div class="label">Pot</div><div class="val">${pot()}</div></div>
+    </div>
+    ${state.revealed?"":`<div class="chatbar">💬 <b>In the chat:</b> what does ${R.name} actually need? One line. Problem, not product.</div>`}
+    <div class="reveal ${state.revealed?"show":""} ${state.anim==='reveal'?'fresh':''}">
+      <div class="need"><div class="label">The real need</div><p>${R.need}</p></div>
+      <div class="reqs">
+        <div class="req"><div class="label">Functional requirement</div>${R.f}</div>
+        <div class="req"><div class="label">Non-functional requirement</div>${R.nf}</div>
+      </div>
+      <div class="twist">↳ ${R.twist}</div>
+    </div>`;
+}
+function end(){
+  state.screen="end";state.done.add(state.r);
+  const top=[...players].sort((a,b)=>b.s-a.s)[0];
+  $("#stage").innerHTML=`
+    <div class="label">Debrief</div>
+    <div class="big">${top&&top.s>0?`<span>${esc(top.n)}</span> wins.`:"Game over."}</div>
+    <p class="lede">You just did elicitation. Every “but why though?” was a technique: questioning, digging past the solution to the need.</p>
+    <ul class="endlist">
+      <li><b>Task 1 (K13)</b> asks why we elicit requirements rather than gather solutions. You’ve got six examples. Now find one from <i>your</i> organisation.</li>
+      <li><b>K16:</b> every round had a functional and a non-functional requirement. Which kind did stakeholders forget about?</li>
+      <li><b>Your turn:</b> who at work has asked you for a solution recently? What would you ask them first?</li>
+    </ul>
+    <button class="btn" onclick="restart()">Play again</button>`;
+  dots();
+}
+function render(){setTimeout(()=>state.anim=null,0);state.screen==="intro"?intro():state.screen==="round"?round():null;dots();renderPlayers()}
+function go(i){
+  if(state.screen==="round"&&state.revealed)state.done.add(state.r);
+  state={...state,screen:"round",r:i,clues:0,revealed:false};render();
+}
+function why(){if(state.screen!=="round"||state.revealed||state.clues>=3)return;state.clues++;state.anim='clue';render()}
+function reveal(){if(state.screen!=="round"||state.revealed)return;state.revealed=true;state.anim='reveal';state.done.add(state.r);render()}
+function next(){if(state.screen!=="round"||!state.revealed)return;state.r===ROUNDS.length-1?end():go(state.r+1)}
+function restart(){state={screen:"intro",r:0,clues:0,revealed:false,done:new Set()};players.forEach(p=>p.s=0);save();render()}
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function renderPlayers(){
+  const max=Math.max(0,...players.map(p=>p.s));
+  const canAward=state.screen==="round";
+  $("#players").innerHTML=players.map((p,i)=>`
+    <div class="p ${p.s>0&&p.s===max?"lead":""}">
+      <span class="nm">${esc(p.n)}</span>
+      <span class="sc">${p.s}</span>
+      <button class="award" onclick="award(${i})" ${canAward&&pot()>0?"":"disabled"} title="Give the current pot">+${canAward?pot():0}</button>
+      <button onclick="undo(${i})" title="Remove 100">−</button>
+    </div>`).join("")||`<p class="hint">No players yet. Add names as people join.</p>`;
+}
+function award(i){players[i].s+=pot();save();renderPlayers()}
+function resetScores(){players.forEach(p=>p.s=0);save();renderPlayers()}
+function resetAll(){players=[];save();state={screen:"intro",r:0,clues:0,revealed:false,done:new Set()};render()}
+function armed(btn,fn){
+  if(btn.dataset.armed){clearTimeout(btn._t);btn.textContent=btn.dataset.label;delete btn.dataset.armed;btn.classList.remove("arm");fn();return}
+  btn.dataset.label=btn.textContent;btn.dataset.armed=1;btn.textContent="Click again to confirm";btn.classList.add("arm");
+  btn._t=setTimeout(()=>{btn.textContent=btn.dataset.label;delete btn.dataset.armed;btn.classList.remove("arm")},3000)}
+function undo(i){players[i].s=Math.max(0,players[i].s-100);save();renderPlayers()}
+function addPlayer(){const v=$("#nameIn").value.trim();
+  if(v){players.push({n:v,s:0});save();$("#nameIn").value="";renderPlayers()}
+  $("#nameIn").focus()}
+$("#addBtn").addEventListener("click",addPlayer);
+$("#nameIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addPlayer()}});
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT")return;
+  const k=e.key.toLowerCase();
+  if(k==="w")why();else if(k==="r")reveal();else if(k==="n")next();
+});
+if(location.hash==="#coach")crib();else render();
+</script>
+</body>
+</html>
